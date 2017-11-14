@@ -10,12 +10,20 @@ socket.on('disconnect', function() {
 
 socket.on('newMessage', function(message) {
   console.log('new message', message);
+  var li = $('<li></li>');
+  li.text(`${message.from}: ${message.text}`);
+
+  $('#messages').append(li);
 });
 
-socket.on('wellcome', function(message) {
-  console.log(message);
-});
+// prevent page refresh
+$('#message-form').on('submit', function(e) {
+  e.preventDefault();
 
-socket.on('newUser', function(message) {
-  console.log(message);
+  socket.emit('createMessage', {
+    from: 'User',
+    text: $('[name=message]').val()
+  }, function() {
+
+  });
 });

@@ -14,12 +14,16 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
 
-  socket.emit('wellcome', generateMessage('Admin', 'Wellcome to the chat App'));
+  // wellcome message to all users
+  socket.emit('newMessage', generateMessage('Admin', 'Wellcome to the chat App'));
 
-  socket.broadcast.emit('newUser', generateMessage('Admin', 'New user joined'));
+  // message for all user less the new user joined
+  socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
-  socket.on('createMessage', (message) => {
+  // return messages from server to all users
+  socket.on('createMessage', (message, callback) => {
     io.emit('newMessage', generateMessage(message.from, message.text));
+    callback('This is from the server');
   });
 
   socket.on('disconnect', () => {
