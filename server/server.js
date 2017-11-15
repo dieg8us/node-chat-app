@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
   // return messages from server to all users
   socket.on('createMessage', (message, callback) => {
     io.emit('newMessage', generateMessage(message.from, message.text));
-    callback('This is from the server');
+    callback();
   });
 
   // send location to all users
