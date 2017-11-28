@@ -1,5 +1,6 @@
 var socket = io();
 
+// function to scroll messages depending position
 function scrollToBottom() {
   // selectors
   var messages = $('#messages');
@@ -16,14 +17,36 @@ function scrollToBottom() {
   }
 };
 
+// log connect client
 socket.on('connect', function ()  {
-  console.log('Connected to server!');
+  var params = $.deparam(window.location.search)  ;
+
+  socket.emit('join', params, function (err) {
+    if (err) {
+      alert(err);
+      window.location.href = '/';
+    } else {
+      console.log('No error');
+    }
+  });
 });
 
+// log disconnected client
 socket.on('disconnect', function() {
   console.log('Disconnected from server');
 });
 
+socket.on('updateUserList', function(users) {
+  let ol = $('<ol></ol>');
+
+  users.forEach(function (user) {
+    ol.append($('<li></li>').text(user));
+  });
+
+  $('#users').html(ol);
+});
+
+// create new message introduced with the client
 socket.on('newMessage', function(message) {
   var formattedTime = moment(message.createdAt).format('h:mm a');
   var template = $('#message-template').html();
@@ -37,6 +60,7 @@ socket.on('newMessage', function(message) {
   scrollToBottom();
 });
 
+// create message for location
 socket.on('newLocationMessage', function(message) {
   var formattedTime = moment(message.createdAt).format('h:mm a');
   var template = $('#location-message-template').html();
