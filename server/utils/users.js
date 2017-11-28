@@ -1,14 +1,3 @@
-// [{
-//   id: '/hasjhdy564',
-//   name: 'Diego',
-//   room: 'The Office Fans'
-// }];
-
-// addUser(id, name, room)
-// removeUser(id)
-// getUser(id)
-// getUserList(room)
-
 class Users {
   constructor () {
     this.users = [];
